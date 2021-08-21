@@ -62,7 +62,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
     const newOrder = req.body;
      orderCollection.insertOne(newOrder)
     .then(result => {
-      console.log('inserted',result.insertedCount );
+      //console.log('inserted',result.insertedCount );
       res.send(result.insertedCount > 0)
     })
    })
@@ -75,11 +75,21 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 //         })
 // })
 app.get('/order',(req,res) => {
+  console.log(req.query.email); 
   orderCollection.find({email:req.query.email})
-  .toArray((err, order) => {
-    res.send(order)
+  .toArray((err, document) => {
+    res.send(document)
   })
 })
+
+app.post('/isAdmin', (req, res) => {
+  const email = req.body.email;
+  photographyCollection.find({ email: email })
+      .toArray((err, admin) => {
+          res.send(admin.length > 0);
+      })
+})
+
 
 
 //   app.patch('/update/:id', (req, res) => {
