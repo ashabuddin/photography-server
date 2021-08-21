@@ -67,16 +67,9 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
     })
    })
 
-//    app.get('/order', (req, res) => {
-//     console.log(req.query.email); 
-//     orderCollection.find({email:req.query.email})
-//         .toArray((err, docs) =>{
-//            res.send(docs)
-//         })
-// })
 app.get('/order',(req,res) => {
-  console.log(req.query.email); 
-  orderCollection.find({email:req.query.email})
+  //console.log(req.query.email); 
+  orderCollection.find({})
   .toArray((err, document) => {
     res.send(document)
   })
@@ -88,20 +81,8 @@ app.post('/isAdmin', (req, res) => {
       .toArray((err, admin) => {
           res.send(admin.length > 0);
       })
-})
+   })
 
-
-
-//   app.patch('/update/:id', (req, res) => {
-//     toDoCollection.updateOne({_id: ObjectId(req.params.id)},
-//         {
-//           $set:{name:req.body.name,email:req.body.email}
-//         }
-//     ).then(result => {
-//         res.send(result.modifiedCount > 0)
-//     })
-// })
-  
 
  });
 
