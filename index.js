@@ -23,6 +23,7 @@ app.get('/',(req, res) => {
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
  client.connect(err => {
   const photographyCollection = client.db("photography").collection("serviceEvent");
+  const orderCollection = client.db("photography").collection("order");
 
   app.post("/addService" , (req,res) => {
       const serviceEvent = req.body;
@@ -41,12 +42,12 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
     })
   })
 
-//   app.get('/singleList/:id',(req,res)=>{
-//     toDoCollection.find({_id:ObjectId(req.params.id)})
-//     .toArray((err,documents)=>{
-//       res.send(documents[0])
-//     })
-//   })
+  app.get('/service/:id',(req,res)=>{
+    photographyCollection.find({_id:ObjectId(req.params.id)})
+    .toArray((err,documents)=>{
+      res.send(documents[0])
+    })
+  })
 
   
   app.delete('/delete/:id',(req,res)=> {
@@ -56,6 +57,30 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
       res.send(document.deletedCount>0)
     })
   })
+
+  app.post('/addOrder', (req,res) => {
+    const newOrder = req.body;
+     orderCollection.insertOne(newOrder)
+    .then(result => {
+      console.log('inserted',result.insertedCount );
+      res.send(result.insertedCount > 0)
+    })
+   })
+
+//    app.get('/order', (req, res) => {
+//     console.log(req.query.email); 
+//     orderCollection.find({email:req.query.email})
+//         .toArray((err, docs) =>{
+//            res.send(docs)
+//         })
+// })
+app.get('/order',(req,res) => {
+  orderCollection.find({email:req.query.email})
+  .toArray((err, order) => {
+    res.send(order)
+  })
+})
+
 
 //   app.patch('/update/:id', (req, res) => {
 //     toDoCollection.updateOne({_id: ObjectId(req.params.id)},
